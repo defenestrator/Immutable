@@ -1,0 +1,23 @@
+{
+    "name": "defenestrator/laravel-immutable-eloquent",
+    "description": "Immutable trait for your Laravel Eloquent models.",
+    "type": "library",
+    "require": {
+        "illuminate/support": "^6.12",
+        "illuminate/database": "^6.12",
+        "illuminate/foundation": "^1.1"
+    },
+    "autoload": {
+        "psr-4": {
+            "Defenestrator\\": "src/"
+        }
+    },
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Jeremy Anderson",
+            "email": "529446+defenestrator@users.noreply.github.com"
+        }
+    ],
+    "minimum-stability": "stable"
+}
