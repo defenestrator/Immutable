@@ -1,6 +1,6 @@
 {
     "name": "defenestrator/laravel-immutable-eloquent",
-    "description": "Immutable trait for your Laravel Eloquent models.",
+    "description": "Immutable trait for Laravel Eloquent models.",
     "type": "library",
     "require-dev": {
         "illuminate/support": "^6.12",
