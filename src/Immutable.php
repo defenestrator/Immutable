@@ -2,50 +2,46 @@
 
 namespace Defenestrator\Traits;
 
-use Defenestrator\Exceptions\Immutability;
-use Defenestrator\Exceptions\Corruption;
+use Cake\Chronos\Chronos;
+use Illuminate\Foundation;
 
 trait Immutable
 {   
     public static $hashCheck = true;
     
     /**
-     * :::: Laravel Eloquent Immutable trait documentation ::::
+     * :::: Laravel Eloquent Immutable Trait Documentation ::::
+     * 
+     * This package is not optimal, but it may be sufficient.
      * 
      * Model and data schema considerations are as follows: 
      * The contentKey() method returns 'state' by default,
      * The hashKey() method returns 'hash' by default, 
      * you should configure them as needed.
-     * 
-     * Do not use $timestamps() or $timestampsTz().
-     * Do not use the softDeletes() column type.
-     * 
+     *  
      * Use of created_at is encouraged but not required.
+     * Use of Blueprint::timestamps() is discouraged.
+     * Use of updated_at implies mutability, don't.
      * 
      * The hash is validated at retrieval by default.
      * This may be overriden by setting 
      * static::$hashCheck = false in 
      * your models' boot() method.
      * this is not a good idea.
+     *      
+     * Typing is not the bottleneck.
+     * Endeavor to be thoughtgful.
      * 
-     * If you need to distribute some data over a large number 
-     * of persistence servers, consider using uuids. This is 
-     * maybe a good idea, and super cool; but probably not.
-     * 
-     * This is not cryptographically secure, but it is useful.
-     * If you want crypto-secured data you should make it 
-     * yourself so you know exactly what it does. Grok?
-     *  
      * @return void
     */
     public static function bootImmutable()
     {
         static::updating(function ($model) {
-            throw new Immutability;
+            return abort(401, 'Immutable Model, update not permitted');
         });
         
         static::deleting(function ($model) {
-            throw new Immutability;
+            return abort(401, 'Immutable Model, delete not permitted');
         });
 
         static::creating(function ($model) {
@@ -58,7 +54,7 @@ trait Immutable
         static::retrieved(function ($model) {
             if (static::$hashCheck) {
                 if (sha1(strval($model->{$model->contentKey()})) != strval($model->{$model->hashKey()})) {
-                    throw new Corruption;
+                    abort(500, 'Hash check failed. Immutable model data is corrupt.');
                 }
             }   
         });
