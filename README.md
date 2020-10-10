@@ -1,6 +1,6 @@
-# Laravel Eloquent Immutable Trait
+# Laravel Eloquent Immutable Trait Documentation
 
-## This package is not optimal, but it may be sufficient
+## This package is not optimal, but it may be sufficient for some
 
 ### The `hashedContent()` method returns `'state'` by default
 
