@@ -22,4 +22,4 @@ This may not be a good idea.
 
 -----
 
-# Typing is not the bottleneck, be thoughtgful
+# Typing is not the bottleneck, endeavor to be thoughtful
