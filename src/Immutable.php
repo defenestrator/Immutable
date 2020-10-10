@@ -4,30 +4,28 @@ namespace Defenestrator\Traits;
 
 use Cake\Chronos\Chronos;
 use Illuminate\Foundation;
+use Illuminate\Support\Hash;
 
 trait Immutable
 {   
-    public static $hashCheck = true;
+    protected static $checkHash = true;
     
     /**
      * :::: Laravel Eloquent Immutable Trait Documentation ::::
      * 
      * This package is not optimal, but it may be sufficient.
      * 
-     * Model and data schema considerations are as follows: 
-     * The contentKey() method returns 'state' by default,
-     * The hashKey() method returns 'hash' by default, 
-     * you should configure them as needed.
+     * The hashedContent() method returns 'state' by default,
+     * The hashColumn() method returns 'hash' by default, 
      *  
-     * Use of created_at is encouraged but not required.
-     * Use of Blueprint::timestamps() is discouraged.
-     * Use of updated_at implies mutability, don't.
+     * Use of created_at is acceptable but not required.
+     * Use of updated_at implies mutability, so using
+     * Blueprint::timestamps() is discouraged.
      * 
-     * The hash is validated at retrieval by default.
-     * This may be overriden by setting 
-     * static::$hashCheck = false in 
-     * your models' boot() method.
-     * this is not a good idea.
+     * Hash checking may be overriden simply by 
+     * setting static::$checkHash = false 
+     * in the model's boot() method,
+     * this may not be a good idea.
      *      
      * Typing is not the bottleneck.
      * Endeavor to be thoughtgful.
@@ -45,27 +43,27 @@ trait Immutable
         });
 
         static::creating(function ($model) {
-            if (static::$hashCheck) {
-                $model->{$model->hashKey()} = sha1($model->{$model->contentKey()});
+            if (static::$checkHash) {
+                $model->{$model->hashKey()} = Hash::make($model->{$model->contentKey()});
             }            
             $model->created_at = $model->freshTimestamp();
         });
         
         static::retrieved(function ($model) {
-            if (static::$hashCheck) {
-                if (sha1(strval($model->{$model->contentKey()})) != strval($model->{$model->hashKey()})) {
+            if (static::$checkHash) {
+                if ( Hash::check($model->contentKey()) ) {
                     abort(500, 'Hash check failed. Immutable model data is corrupt.');
                 }
             }   
         });
     }
     
-    public function hashKey() : string
+    protected function hashedColumn() : string
     {
         return 'hash';
     }
 
-    public function contentKey() : string
+    protected function hashedContent() : string
     {
         return 'state';
     }

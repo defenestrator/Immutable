@@ -3,9 +3,7 @@
     "description": "Immutable trait for Laravel Eloquent models.",
     "type": "library",
     "require-dev": {
-        "illuminate/support": "^6.12",
-        "illuminate/database": "^6.12",
-        "illuminate/foundation": "^1.1"
+        "phpunit/phpunit": "^9.1"
     },
     "autoload": {
         "psr-4": {
@@ -19,5 +17,8 @@
             "email": "529446+defenestrator@users.noreply.github.com"
         }
     ],
-    "minimum-stability": "stable"
+    "minimum-stability": "stable",
+    "require": {
+        "laravel/framework": "^8.9"
+    }
 }
